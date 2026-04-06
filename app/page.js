@@ -178,7 +178,7 @@ export default function Home() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up fill-mode-both">
             See It <span className="text-gradient">In Action</span>
           </h2>
-          <p className="text-white/60 text-lg animate-fade-in-up fill-mode-both" style={{ animationDelay: '100ms' }}>
+          <p className="text-slate-600 text-lg animate-fade-in-up fill-mode-both" style={{ animationDelay: '100ms' }}>
             Watch how AI Auto-Reply turns missed calls into booked appointments
           </p>
         </div>
@@ -209,7 +209,7 @@ export default function Home() {
                           msg.type === 'user'
                             ? 'chat-bubble-user'
                             : 'chat-bubble-ai'
-                        } px-4 py-2 max-w-xs text-sm`}
+                        } px-4 py-2 max-w-xs text-sm text-white`}
                       >
                         {msg.text}
                       </div>
@@ -230,7 +230,7 @@ export default function Home() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up fill-mode-both">
             How It <span className="text-gradient">Works</span>
           </h2>
-          <p className="text-white/60 text-lg animate-fade-in-up fill-mode-both" style={{ animationDelay: '100ms' }}>
+          <p className="text-slate-600 text-lg animate-fade-in-up fill-mode-both" style={{ animationDelay: '100ms' }}>
             Three simple steps to never lose a customer again
           </p>
         </div>
@@ -256,7 +256,7 @@ export default function Home() {
           {/* Connector arrow - hidden on mobile */}
           <div className="hidden md:flex absolute top-1/3 left-1/3 right-auto transform -translate-y-1/2 pointer-events-none">
             <div
-              className="text-3xl text-white/20 font-bold"
+              className="text-3xl text-slate-300 font-bold"
               style={{
                 position: 'absolute',
                 left: '50%',
@@ -288,7 +288,7 @@ export default function Home() {
           {/* Connector arrow - hidden on mobile */}
           <div className="hidden md:flex absolute top-1/3 right-1/3 left-auto transform -translate-y-1/2 pointer-events-none">
             <div
-              className="text-3xl text-white/20 font-bold"
+              className="text-3xl text-slate-300 font-bold"
               style={{
                 position: 'absolute',
                 right: '50%',
@@ -327,7 +327,7 @@ export default function Home() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up fill-mode-both">
             Trusted by <span className="text-gradient">Top Businesses</span>
           </h2>
-          <p className="text-white/60 text-lg animate-fade-in-up fill-mode-both" style={{ animationDelay: '100ms' }}>
+          <p className="text-slate-600 text-lg animate-fade-in-up fill-mode-both" style={{ animationDelay: '100ms' }}>
             9 active clients transforming their customer communication
           </p>
         </div>
@@ -395,7 +395,7 @@ export default function Home() {
                 {/* Hover view indicator */}
                 <div className="px-6 py-4 border-t border-white/5 flex items-center justify-between">
                   <span className="text-white/40 text-xs font-mono">{scenario.phone}</span>
-                  <span className="text-white/0 group-hover:text-gradient transition-all text-sm font-medium">
+                  <span className="text-slate-400 group-hover:text-gradient transition-all text-sm font-medium">
                     View →
                   </span>
                 </div>
@@ -410,7 +410,7 @@ export default function Home() {
           ═══════════════════════════════════════════ */}
       <section className="section-divider"></section>
       <footer className="max-w-6xl mx-auto px-6 py-16 text-center">
-        <p className="text-white/40 text-xs font-mono">
+        <p className="text-slate-700 text-xs font-mono">
           AI Auto-Reply · HBCU App Build & Pitch 2026 · Jeeban Bashyal · Alabama A&M University
         </p>
       </footer>

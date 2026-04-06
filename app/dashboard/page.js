@@ -144,7 +144,7 @@ export default function DashboardPage() {
   }, [fetchAll])
 
   return (
-    <div className="min-h-screen bg-gradient-mesh">
+    <div className="min-h-screen bg-navy bg-gradient-mesh text-white">
       {/* Navbar */}
       <Navbar />
 
