@@ -10,6 +10,7 @@ import {
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const phone = searchParams.get('phone')
+  const scenarioId = searchParams.get('scenarioId')
 
   if (phone) {
     return NextResponse.json({
@@ -18,7 +19,10 @@ export async function GET(request) {
     })
   }
 
-  const conversations = getAllConversations()
+  const conversations = getAllConversations(
+    scenarioId ? { scenarioId } : {}
+  )
+
   return NextResponse.json({
     conversations,
     stats: getStats(),

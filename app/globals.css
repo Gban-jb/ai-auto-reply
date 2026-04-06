@@ -8,9 +8,13 @@
 html, body {
   background-color: #04111F;
   color: white;
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
   scroll-behavior: smooth;
 }
 * { box-sizing: border-box; }
+code, pre {
+  font-family: "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+}
 ::selection { background: rgba(0,200,212,0.25); color: white; }
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -139,6 +143,11 @@ html, body {
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+@keyframes walkthrough-progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 /* ═══════════════════════════════════════════
    ANIMATION UTILITY CLASSES
    ═══════════════════════════════════════════ */
@@ -158,6 +167,7 @@ html, body {
 .animate-spin-slow { animation: spin-slow 10s linear infinite; }
 .animate-border-glow { animation: border-glow 3s ease-in-out infinite; }
 .animate-stagger-in { animation: stagger-in 0.5s ease-out forwards; }
+.walkthrough-progress-fill { animation: walkthrough-progress linear forwards; }
 
 .delay-100 { animation-delay: 100ms; }
 .delay-200 { animation-delay: 200ms; }

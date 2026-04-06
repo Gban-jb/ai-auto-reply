@@ -4,7 +4,15 @@ import { addMessage, saveLead } from '@/lib/store'
 
 export async function POST(request) {
   try {
-    const { phone, scenarioId, businessConfig } = await request.json()
+    const {
+      phone,
+      scenarioId,
+      businessConfig,
+      customerName,
+      address,
+      serviceType,
+      priority,
+    } = await request.json()
 
     if (!phone) {
       return NextResponse.json(
@@ -30,7 +38,12 @@ export async function POST(request) {
       scenarioId: scenarioId || 'custom',
       businessName: businessConfig?.name || process.env.BUSINESS_NAME,
       industry: businessConfig?.industry,
+      customerName: customerName || '',
+      address: address || '',
+      serviceType: serviceType || '',
+      priority: priority || 'normal',
       status: 'new',
+      queueStatus: 'new-call',
       missedCallAt: Date.now(),
     })
 
