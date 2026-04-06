@@ -4,7 +4,16 @@ import { addMessage, getConversation, saveLead } from '@/lib/store'
 
 export async function POST(request) {
   try {
-    const { phone, message, businessConfig } = await request.json()
+    const {
+      phone,
+      message,
+      businessConfig,
+      scenarioId,
+      customerName,
+      address,
+      serviceType,
+      priority,
+    } = await request.json()
 
     if (!phone) {
       return NextResponse.json({ error: 'phone is required' }, { status: 400 })
@@ -26,7 +35,16 @@ export async function POST(request) {
 
     addMessage(phone, 'assistant', aiReply)
     saveLead(phone, {
+      phone,
+      scenarioId: scenarioId || 'custom',
+      businessName: businessConfig?.name || process.env.BUSINESS_NAME,
+      industry: businessConfig?.industry,
+      customerName: customerName || undefined,
+      address: address || undefined,
+      serviceType: serviceType || undefined,
+      priority: priority || undefined,
       status: 'active',
+      queueStatus: 'waiting',
       lastCustomerMessage: message,
       lastReplyAt: Date.now(),
     })

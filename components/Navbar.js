@@ -7,7 +7,7 @@ const NAV_ITEMS = [
   { href: '/', label: 'Home', icon: '🏠' },
   { href: '/admin', label: 'Clients', icon: '👑' },
   { href: '/demo', label: 'Demo', icon: '🤖' },
-  { href: '/dashboard', label: 'Dashboard', icon: '📊' },
+  { href: '/dashboard', label: 'Owner', icon: '📊' },
 ]
 
 export default function Navbar() {
