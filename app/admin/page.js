@@ -22,10 +22,11 @@ export default function AdminPage() {
         const response = await fetch('/api/conversations');
         if (response.ok) {
           const data = await response.json();
+          const apiStats = data.stats || {};
           setStats({
-            totalLeads: data.totalLeads || SCENARIOS.length,
-            activeConversations: data.activeConversations || 0,
-            totalMessages: data.totalMessages || 0,
+            totalLeads: apiStats.totalLeads || 0,
+            activeConversations: apiStats.activeConversations || 0,
+            totalMessages: apiStats.totalMessages || 0,
             clientsCount: SCENARIOS.length,
           });
         }
@@ -87,7 +88,7 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-navy grid-bg">
+    <div className="min-h-screen bg-navy grid-bg text-white">
       {/* Navbar */}
       <Navbar />
 
