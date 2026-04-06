@@ -40,7 +40,7 @@ export default function ClientDetailPage() {
 
   if (!scenario) {
     return (
-      <div className="min-h-screen bg-gradient-hero">
+      <div className="min-h-screen bg-gradient-hero text-white">
         <Navbar />
         <main className="max-w-6xl mx-auto px-4 py-20 text-center">
           <h1 className="text-4xl font-bold mb-4">Client Not Found</h1>
@@ -56,7 +56,7 @@ export default function ClientDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-hero">
+    <div className="min-h-screen bg-gradient-hero text-white">
       <Navbar />
 
       {/* HERO BANNER */}

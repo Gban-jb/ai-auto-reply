@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { SCENARIOS } from '@/lib/scenarios';
 import Navbar from '@/components/Navbar';
 
-export default function DemoPage() {
+function DemoPageContent() {
   // State
   const [selectedScenario, setSelectedScenario] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -177,7 +177,7 @@ export default function DemoPage() {
   }
 
   return (
-    <div className={`bg-gradient-mesh min-h-screen flex flex-col overflow-hidden`}>
+    <div className="bg-slate-50 text-slate-900 min-h-screen flex flex-col overflow-hidden">
       {/* Navbar */}
       <Navbar />
 
@@ -186,41 +186,63 @@ export default function DemoPage() {
         <div className="max-w-7xl mx-auto h-full px-6 py-8 flex flex-col animate-fade-in-up fill-mode-both">
           {/* Client Selector */}
           <div className="mb-6 animate-fade-in-up fill-mode-both delay-100">
-            <p className="text-white/40 text-xs font-mono uppercase mb-4 tracking-widest">
-              Select a Business
-            </p>
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_20px_60px_rgba(15,23,42,0.06)]">
+              <p className="text-slate-500 text-xs font-mono uppercase mb-4 tracking-widest">
+                Select a Business
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
               {SCENARIOS.map((scenario, idx) => (
                 <button
                   key={scenario.id}
                   onClick={() => handleScenarioSelect(scenario)}
-                  className={`flex items-center gap-2 px-5 py-3 rounded-xl border text-sm whitespace-nowrap transition-all duration-300 animate-fade-in-up fill-mode-both ${
-                    idx * 50
-                  }ms hover-lift ${
+                  className={`group flex items-center gap-3 rounded-2xl border px-4 py-4 text-left transition-all duration-300 animate-fade-in-up fill-mode-both hover:-translate-y-0.5 ${
                     selectedScenario.id === scenario.id
-                      ? `border-[${scenario.color}] bg-[${scenario.color}]/10 text-[${scenario.color}] ${
-                          scenario.color === '#00C8D4' ? 'glow-teal' : ''
-                        }`
-                      : 'border-white/20 text-white/60 hover:border-white/40 hover:text-white/80'
+                      ? 'bg-white'
+                      : 'bg-white hover:border-slate-300 hover:shadow-md'
                   }`}
-                  style={
-                    selectedScenario.id === scenario.id
-                      ? {
-                          borderColor: scenario.color,
-                          backgroundColor: `${scenario.color}10`,
-                          color: scenario.color,
-                          boxShadow:
-                            scenario.color === '#00C8D4'
-                              ? `0 0 12px ${scenario.color}40`
-                              : 'none',
-                        }
-                      : {}
-                  }
+                  style={{
+                    animationDelay: `${idx * 50}ms`,
+                    borderColor:
+                      selectedScenario.id === scenario.id
+                        ? scenario.color
+                        : '#E2E8F0',
+                    boxShadow:
+                      selectedScenario.id === scenario.id
+                        ? `0 14px 36px ${scenario.color}22`
+                        : '0 8px 24px rgba(15, 23, 42, 0.05)',
+                  }}
                 >
-                  <span className="text-lg">{scenario.emoji}</span>
-                  {scenario.label}
+                  <span
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl"
+                    style={{
+                      backgroundColor: `${scenario.color}16`,
+                      color: scenario.color,
+                    }}
+                  >
+                    {scenario.emoji}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-semibold text-slate-900">
+                      {scenario.label}
+                    </span>
+                    <span className="block truncate text-xs text-slate-500">
+                      {scenario.industry}
+                    </span>
+                  </span>
+                  <span
+                    className="text-lg leading-none"
+                    style={{
+                      color:
+                        selectedScenario.id === scenario.id
+                          ? scenario.color
+                          : '#94A3B8',
+                    }}
+                  >
+                    ›
+                  </span>
                 </button>
               ))}
+            </div>
             </div>
           </div>
 
@@ -228,7 +250,7 @@ export default function DemoPage() {
           <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 flex-1 min-h-0">
             {/* Left Sidebar - Business Info Panel */}
             <div className="animate-fade-in-left fill-mode-both delay-100">
-              <div className="glass glass-card h-full overflow-y-auto flex flex-col rounded-2xl p-0">
+              <div className="h-full overflow-y-auto flex flex-col rounded-2xl border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)] p-0">
                 {/* Hero Image */}
                 {selectedScenario.heroImage && (
                   <div className="relative h-40 overflow-hidden rounded-t-2xl">
@@ -237,7 +259,7 @@ export default function DemoPage() {
                       alt={selectedScenario.businessName}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-navy2" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white" />
                   </div>
                 )}
 
@@ -253,37 +275,37 @@ export default function DemoPage() {
                       {selectedScenario.emoji}
                     </div>
                     <div className="flex-1">
-                      <h2 className="font-bold text-lg text-white leading-tight">
+                      <h2 className="font-bold text-lg text-slate-900 leading-tight">
                         {selectedScenario.businessName}
                       </h2>
-                      <p className="text-white/40 text-xs font-mono mt-1">
+                      <p className="text-slate-500 text-xs font-mono mt-1">
                         {selectedScenario.industry}
                       </p>
-                      <p className="text-white/50 text-xs mt-1 leading-snug">
+                      <p className="text-slate-600 text-xs mt-1 leading-snug">
                         {selectedScenario.tagline}
                       </p>
                     </div>
                   </div>
 
-                  <div className="border-t border-white/10 my-4" />
+                  <div className="border-t border-slate-200 my-4" />
 
                   {/* Info Rows */}
                   <div className="space-y-3 mb-5 animate-fade-in-left fill-mode-both delay-200">
                     <div className="flex items-start gap-3">
                       <span className="text-lg mt-0.5">📍</span>
-                      <p className="text-white/50 text-xs leading-snug">
+                      <p className="text-slate-600 text-xs leading-snug">
                         {selectedScenario.address}
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-lg mt-0.5">📞</span>
-                      <p className="text-white/50 text-xs font-mono">
+                      <p className="text-slate-600 text-xs font-mono">
                         {selectedScenario.phone}
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="text-lg mt-0.5">🕐</span>
-                      <p className="text-white/50 text-xs leading-snug">
+                      <p className="text-slate-600 text-xs leading-snug">
                         {selectedScenario.hours}
                       </p>
                     </div>
@@ -293,14 +315,14 @@ export default function DemoPage() {
                         href={selectedScenario.website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-teal text-xs hover:text-mint transition-colors hover-scale"
+                        className="text-teal text-xs hover:text-sky-600 transition-colors hover-scale"
                       >
                         Visit Website
                       </a>
                     </div>
                   </div>
 
-                  <div className="border-t border-white/10 my-4" />
+                  <div className="border-t border-slate-200 my-4" />
 
                   {/* Simulate Button */}
                   <button
@@ -323,16 +345,16 @@ export default function DemoPage() {
 
                   {/* Response Time */}
                   {responseTimeMs !== null && (
-                    <div className="text-mint text-xs font-mono text-center mb-4 animate-scale-in fill-mode-both">
+                    <div className="text-emerald-600 text-xs font-mono text-center mb-4 animate-scale-in fill-mode-both">
                       ⚡ {responseTimeMs}ms response time
                     </div>
                   )}
 
-                  {responseTimeMs !== null && <div className="border-t border-white/10 my-4" />}
+                  {responseTimeMs !== null && <div className="border-t border-slate-200 my-4" />}
 
                   {/* Quick Replies */}
                   <div className="animate-fade-in-left fill-mode-both delay-400">
-                    <p className="text-white/30 text-[10px] font-mono uppercase tracking-widest mb-3">
+                    <p className="text-slate-400 text-[10px] font-mono uppercase tracking-widest mb-3">
                       Quick Replies
                     </p>
                     <div className="flex flex-col gap-2 animate-stagger-in fill-mode-both">
@@ -341,7 +363,7 @@ export default function DemoPage() {
                           key={idx}
                           onClick={() => handleQuickReply(reply)}
                           disabled={messages.length === 0}
-                          className="glass border border-white/10 rounded-lg px-3 py-2 text-[11px] text-white/60 hover:text-white/80 text-left transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover-scale animate-fade-in-left fill-mode-both"
+                          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-[11px] text-slate-700 hover:border-slate-300 hover:bg-slate-50 text-left transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed hover-scale animate-fade-in-left fill-mode-both"
                           style={{
                             animationDelay: `${200 + idx * 50}ms`,
                           }}
@@ -357,9 +379,9 @@ export default function DemoPage() {
 
             {/* Right - Chat Window */}
             <div className="animate-fade-in-right fill-mode-both delay-100">
-              <div className="glass glass-card h-full rounded-2xl overflow-hidden flex flex-col">
+              <div className="h-full rounded-2xl overflow-hidden flex flex-col border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
                 {/* Chat Header */}
-                <div className="glass-strong border-b border-white/10 px-6 py-4 flex items-center justify-between">
+                <div className="bg-slate-950 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
                       className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold shadow-lg animate-scale-in fill-mode-both delay-200"
@@ -384,7 +406,7 @@ export default function DemoPage() {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4">
+                <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-4 bg-slate-950">
                   {messages.length === 0 ? (
                     <div className="flex-1 flex flex-col items-center justify-center gap-4 animate-fade-in-up fill-mode-both delay-300">
                       <div className="text-6xl opacity-20 animate-float">📞</div>
@@ -435,7 +457,7 @@ export default function DemoPage() {
                       })}
 
                       {loading && (
-                        <div className="flex items-center gap-2 px-5 py-3 glass-card rounded-2xl rounded-bl-none self-start animate-fade-in-up fill-mode-both">
+                        <div className="flex items-center gap-2 px-5 py-3 bg-slate-800 border border-slate-700 rounded-2xl rounded-bl-none self-start animate-fade-in-up fill-mode-both">
                           <div
                             className="w-2 h-2 bg-teal rounded-full animate-bounce"
                             style={{ animationDelay: '0ms' }}
@@ -464,7 +486,7 @@ export default function DemoPage() {
                 )}
 
                 {/* Input Bar */}
-                <div className="glass-strong border-t border-white/10 p-4 flex gap-3">
+                <div className="border-t border-slate-200 bg-white p-4 flex gap-3">
                   <input
                     type="text"
                     value={inputMessage}
@@ -472,7 +494,7 @@ export default function DemoPage() {
                     onKeyDown={handleSendKeyDown}
                     disabled={messages.length === 0 || loading}
                     placeholder="Reply as the customer..."
-                    className="flex-1 glass border border-white/20 rounded-xl px-4 py-3 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-teal/60 focus:ring-1 focus:ring-teal/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:border-teal/60 focus:ring-1 focus:ring-teal/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   />
                   <button
                     onClick={handleSendMessage}
@@ -493,5 +515,19 @@ export default function DemoPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function DemoPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="bg-slate-50 min-h-screen flex items-center justify-center">
+          <p className="text-slate-500 text-sm font-medium">Loading demo...</p>
+        </div>
+      }
+    >
+      <DemoPageContent />
+    </Suspense>
   );
 }
