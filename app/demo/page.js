@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { SCENARIOS } from '@/lib/scenarios';
 import Navbar from '@/components/Navbar';
+import DemoVideo from '@/components/DemoVideo';
 
 function DemoPageContent() {
   // State
@@ -244,6 +245,19 @@ function DemoPageContent() {
               ))}
             </div>
             </div>
+          </div>
+
+          {/* Animated Demo Video */}
+          <div className="mb-8 animate-fade-in-up fill-mode-both delay-200">
+            <div className="text-center mb-4">
+              <p className="text-white/40 text-xs font-mono uppercase tracking-widest mb-1">How It Works</p>
+              <h3 className="text-white text-lg font-bold">Watch the Full Missed-Call Recovery Flow</h3>
+            </div>
+            <DemoVideo
+              businessName={selectedScenario.businessName}
+              businessEmoji={selectedScenario.emoji}
+              color={selectedScenario.color}
+            />
           </div>
 
           {/* Two Column Layout */}
