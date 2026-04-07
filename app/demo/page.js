@@ -11,6 +11,7 @@ function DemoPageContent() {
   // State
   const [selectedScenario, setSelectedScenario] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [demoPlayToken, setDemoPlayToken] = useState(0);
   const [calling, setCalling] = useState(false);
   const [loading, setLoading] = useState(false);
   const [responseTimeMs, setResponseTimeMs] = useState(null);
@@ -53,6 +54,7 @@ function DemoPageContent() {
     setCalling(true);
     setError(null);
     setResponseTimeMs(null);
+    setDemoPlayToken((token) => token + 1);
 
     try {
       const startTime = Date.now();
@@ -185,8 +187,51 @@ function DemoPageContent() {
       {/* Main Content */}
       <main className="flex-1 overflow-hidden">
         <div className="max-w-7xl mx-auto h-full px-6 py-8 flex flex-col animate-fade-in-up fill-mode-both">
+          <div className="mb-8 animate-fade-in-up fill-mode-both">
+            <div
+              className="relative overflow-hidden rounded-[32px] px-8 py-10 md:px-12 md:py-14"
+              style={{
+                background:
+                  'linear-gradient(135deg, #04111F 0%, #0B1F33 48%, #103656 100%)',
+                boxShadow: '0 28px 90px rgba(4, 17, 31, 0.18)',
+              }}
+            >
+              <div className="absolute inset-0 opacity-70">
+                <div className="absolute -top-16 right-0 h-48 w-48 rounded-full bg-cyan-400/15 blur-3xl" />
+                <div className="absolute bottom-0 left-0 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
+              </div>
+
+              <div className="relative max-w-3xl">
+                <p className="mb-5 text-sm font-bold text-white md:text-base">
+                  ⚡ Powered by GPT-4o-mini
+                </p>
+                <h1 className="mb-5 text-4xl font-black leading-tight text-white md:text-6xl">
+                  Never Lose a Customer to a Missed Call Again
+                </h1>
+                <p className="max-w-2xl text-base font-semibold leading-7 text-white md:text-lg">
+                  AI-powered SMS that instantly texts back your missed callers,
+                  handles the full conversation, and books appointments while
+                  you focus on the job.
+                </p>
+                <div className="mt-8">
+                  <Link
+                    href="#demo-experience"
+                    className="inline-flex items-center justify-center rounded-2xl border border-white/20 px-6 py-3 text-base font-bold text-white transition-transform duration-200 hover:-translate-y-0.5"
+                    style={{
+                      background:
+                        'linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08))',
+                      boxShadow: '0 18px 40px rgba(4, 17, 31, 0.18)',
+                    }}
+                  >
+                    Try Live Demo →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Client Selector */}
-          <div className="mb-6 animate-fade-in-up fill-mode-both delay-100">
+          <div id="demo-experience" className="mb-6 animate-fade-in-up fill-mode-both delay-100">
             <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-[0_20px_60px_rgba(15,23,42,0.06)]">
               <p className="text-slate-500 text-xs font-mono uppercase mb-4 tracking-widest">
                 Select a Business
@@ -250,13 +295,12 @@ function DemoPageContent() {
           {/* Animated Demo Video */}
           <div className="mb-8 animate-fade-in-up fill-mode-both delay-200">
             <div className="text-center mb-4">
-              <p className="text-white/40 text-xs font-mono uppercase tracking-widest mb-1">How It Works</p>
-              <h3 className="text-white text-lg font-bold">Watch the Full Missed-Call Recovery Flow</h3>
+              <p className="text-slate-500 text-xs font-mono uppercase tracking-widest mb-1">How It Works</p>
+              <h3 className="text-slate-900 text-lg font-bold">Watch the Full Missed-Call Recovery Flow</h3>
             </div>
             <DemoVideo
-              businessName={selectedScenario.businessName}
-              businessEmoji={selectedScenario.emoji}
-              color={selectedScenario.color}
+              scenario={selectedScenario}
+              autoplayToken={demoPlayToken}
             />
           </div>
 
@@ -458,7 +502,7 @@ function DemoPageContent() {
                                 : `You · ${timeStr}`}
                             </p>
                             <div
-                              className={`rounded-2xl px-5 py-3 text-white/90 text-sm leading-relaxed max-w-[85%] backdrop-blur-sm transition-all duration-300 ${
+                              className={`rounded-2xl px-5 py-3 text-white/90 text-sm leading-relaxed max-w-[85%] transition-all duration-300 ${
                                 isAssistant
                                   ? 'glass-card rounded-bl-none'
                                   : 'bg-gradient-to-r from-teal/40 to-mint/20 border border-teal/30 rounded-br-none'
@@ -494,7 +538,7 @@ function DemoPageContent() {
 
                 {/* Error Banner */}
                 {error && (
-                  <div className="mx-6 mb-4 bg-red-500/10 border border-red-500/30 text-red-300 text-xs px-4 py-3 rounded-xl backdrop-blur-sm animate-fade-in-up fill-mode-both">
+                  <div className="mx-6 mb-4 bg-red-500/10 border border-red-500/30 text-red-300 text-xs px-4 py-3 rounded-xl animate-fade-in-up fill-mode-both">
                     {error}
                   </div>
                 )}

@@ -86,7 +86,7 @@ export default function Home() {
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center">
           {/* Animated Badge */}
           <div
-            className="inline-block glass rounded-full px-4 py-2 text-xs text-white/70 font-mono mb-8 animate-fade-in-down fill-mode-both"
+            className="inline-block glass rounded-full px-4 py-2 text-xs text-white font-bold font-mono mb-8 animate-fade-in-down fill-mode-both"
             style={{ animationDelay: '0ms' }}
           >
             ⚡ Powered by GPT-4o-mini
@@ -94,16 +94,16 @@ export default function Home() {
 
           {/* Main Heading with gradient text */}
           <h1
-            className="text-6xl md:text-7xl font-black leading-tight mb-6 animate-fade-in-up fill-mode-both"
+            className="text-6xl md:text-7xl font-black leading-tight mb-6 text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.35)] animate-fade-in-up fill-mode-both"
             style={{ animationDelay: '100ms' }}
           >
             Never Lose a Customer to a{' '}
-            <span className="text-gradient">Missed Call</span> Again
+            <span className="text-white">Missed Call</span> Again
           </h1>
 
           {/* Subtitle */}
           <p
-            className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 animate-fade-in-up fill-mode-both"
+            className="text-xl md:text-2xl font-semibold text-white/90 max-w-3xl mx-auto mb-10 animate-fade-in-up fill-mode-both"
             style={{ animationDelay: '200ms' }}
           >
             AI-powered SMS that instantly texts back your missed callers, handles the full conversation, and books appointments — while you focus on the job.
@@ -117,6 +117,11 @@ export default function Home() {
             <Link
               href="/demo"
               className="btn-primary inline-flex items-center justify-center text-lg hover-lift"
+              style={{
+                color: '#FFFFFF',
+                background: 'linear-gradient(135deg, #0891B2 0%, #0F766E 100%)',
+                boxShadow: '0 14px 32px rgba(8, 145, 178, 0.28)',
+              }}
             >
               Try Live Demo →
             </Link>
@@ -325,10 +330,10 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-fade-in-up fill-mode-both">
-            Trusted by <span className="text-gradient">Top Businesses</span>
+            Built for <span className="text-gradient">Real Business Use Cases</span>
           </h2>
           <p className="text-slate-600 text-lg animate-fade-in-up fill-mode-both" style={{ animationDelay: '100ms' }}>
-            9 active clients transforming their customer communication
+            Explore demo business scenarios tailored for different service and retail workflows.
           </p>
         </div>
 
