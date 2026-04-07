@@ -3,12 +3,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { SCENARIOS } from '@/lib/scenarios'
+import { formatRevenueCompact } from '@/lib/revenue'
 import Navbar from '@/components/Navbar'
 
 export default function DashboardPage() {
   // State management
   const [conversations, setConversations] = useState([])
-  const [stats, setStats] = useState({ totalLeads: 0, activeConversations: 0, totalMessages: 0, activeClients: 0 })
+  const [stats, setStats] = useState({ totalLeads: 0, activeConversations: 0, totalMessages: 0, activeClients: 0, totalRevenueSaved: 0 })
   const [selectedPhone, setSelectedPhone] = useState(null)
   const [selectedMsgs, setSelectedMsgs] = useState([])
   const [selectedLead, setSelectedLead] = useState(null)
@@ -73,7 +74,7 @@ export default function DashboardPage() {
       const res = await fetch('/api/conversations')
       const data = await res.json()
       setConversations(data.conversations || [])
-      setStats(data.stats || { totalLeads: 0, activeConversations: 0, totalMessages: 0, activeClients: 0 })
+      setStats(data.stats || { totalLeads: 0, activeConversations: 0, totalMessages: 0, activeClients: 0, totalRevenueSaved: 0 })
     } catch (err) {
       console.error('Failed to fetch conversations:', err)
     } finally {
@@ -131,6 +132,18 @@ export default function DashboardPage() {
     [fetchConversation]
   )
 
+  const getStatusBadgeClass = (status) => {
+    if (status === 'booked') return 'bg-emerald-400/20 text-emerald-300'
+    if (status === 'active') return 'bg-mint/20 text-mint'
+    return 'bg-orange/20 text-orange'
+  }
+
+  const getStatusLabel = (status) => {
+    if (status === 'booked') return 'Booked'
+    if (status === 'active') return 'Active'
+    return 'New'
+  }
+
   // Effects
   useEffect(() => {
     fetchAll()
@@ -149,7 +162,7 @@ export default function DashboardPage() {
       <Navbar />
 
       {/* Stats Bar */}
-      <div className="border-b border-white/10 bg-navy/40 backdrop-blur-xl">
+      <div className="border-b border-white/10 bg-navy/90">
         <div className="mx-auto max-w-7xl px-6 py-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {/* Total Leads */}
@@ -185,14 +198,14 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Active Clients */}
+            {/* Total Revenue Saved */}
             <div className="animate-fade-in-down glass rounded-xl p-4 fill-mode-both delay-400">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white/60">Active Clients</p>
-                  <p className="text-2xl font-bold text-white">{stats.activeClients || 0}</p>
+                  <p className="text-sm text-white/60">Revenue Saved</p>
+                  <p className="text-2xl font-bold text-white">{formatRevenueCompact(stats.totalRevenueSaved || 0)}</p>
                 </div>
-                <div className="text-3xl">⭐</div>
+                <div className="text-3xl">💰</div>
               </div>
             </div>
           </div>
@@ -259,7 +272,7 @@ export default function DashboardPage() {
                   filteredConversations.map((conv, idx) => {
                     const scenario = getScenarioForConv(conv)
                     const businessName = conv.lead?.businessName || conv.businessName || 'Unknown'
-                    const status = conv.lead?.status || 'new'
+                    const status = conv.leadStatus || 'new'
                     const lastMsg = getLastMessage(conv)
                     const isSelected = selectedPhone === conv.phone
 
@@ -284,11 +297,9 @@ export default function DashboardPage() {
                             </div>
                           </div>
                           <span
-                            className={`flex-shrink-0 inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${
-                              status === 'active' ? 'bg-mint/20 text-mint' : 'bg-orange/20 text-orange'
-                            }`}
+                            className={`flex-shrink-0 inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${getStatusBadgeClass(status)}`}
                           >
-                            {status === 'active' ? 'Active' : 'New'}
+                            {getStatusLabel(status)}
                           </span>
                         </div>
 
@@ -363,11 +374,9 @@ export default function DashboardPage() {
                         </h3>
                       </div>
                       <span
-                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold flex-shrink-0 ${
-                          selectedLead?.status === 'active' ? 'bg-mint/20 text-mint' : 'bg-orange/20 text-orange'
-                        }`}
+                        className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold flex-shrink-0 ${getStatusBadgeClass(selectedLead?.status || 'new')}`}
                       >
-                        {selectedLead?.status === 'active' ? 'Active' : 'New'}
+                        {getStatusLabel(selectedLead?.status || 'new')}
                       </span>
                     </div>
                   </div>
@@ -389,6 +398,12 @@ export default function DashboardPage() {
                   <span className="font-mono">{selectedPhone}</span>
                   <span>•</span>
                   <span>{selectedMsgs.length} messages</span>
+                  {selectedLead?.revenueSaved > 0 && (
+                    <>
+                      <span>•</span>
+                      <span>Revenue saved: {formatRevenueCompact(selectedLead.revenueSaved)}</span>
+                    </>
+                  )}
                   {conversations.find((c) => c.phone === selectedPhone)?.lastMessageTime && (
                     <>
                       <span>•</span>
