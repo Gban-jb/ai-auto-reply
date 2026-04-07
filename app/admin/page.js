@@ -111,7 +111,7 @@ export default function AdminPage() {
               {statCards.map((stat, index) => (
                 <div
                   key={stat.label}
-                  className={`glass glass-card border ${stat.borderColor} backdrop-blur-lg rounded-2xl p-6 hover-lift animate-fade-in-up fill-mode-both`}
+                  className={`glass glass-card border ${stat.borderColor} rounded-2xl p-6 hover-lift animate-fade-in-up fill-mode-both`}
                   style={{ animationDelay: `${100 + index * 100}ms` }}
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -136,7 +136,7 @@ export default function AdminPage() {
           {/* Search Bar */}
           <div className="mb-12 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
             <div className="relative">
-              <div className="glass glass-card backdrop-blur-lg rounded-2xl border border-white/10 focus-within:border-teal/50 transition-colors duration-300 p-4 flex items-center gap-3">
+              <div className="glass glass-card rounded-2xl border border-white/10 focus-within:border-teal/50 transition-colors duration-300 p-4 flex items-center gap-3">
                 <span className="text-xl text-teal">🔍</span>
                 <input
                   type="text"
@@ -161,7 +161,7 @@ export default function AdminPage() {
                 {filteredScenarios.map((scenario, index) => (
                   <div
                     key={scenario.id}
-                    className={`glass-card backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden hover-lift hover:border-teal/50 transition-all duration-300 animate-fade-in-up fill-mode-both`}
+                    className={`glass-card rounded-2xl border border-white/10 overflow-hidden hover-lift hover:border-teal/50 transition-all duration-300 animate-fade-in-up fill-mode-both`}
                     style={{ animationDelay: `${300 + index * 75}ms` }}
                   >
                     {/* Hero Image Section */}
@@ -176,7 +176,7 @@ export default function AdminPage() {
 
                       {/* Online Indicator */}
                       <div className="absolute top-3 right-3">
-                        <div className="flex items-center gap-2 glass glass-strong rounded-full px-3 py-1 backdrop-blur-lg border border-white/20">
+                        <div className="flex items-center gap-2 glass glass-strong rounded-full px-3 py-1 border border-white/20">
                           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                           <span className="text-xs font-semibold text-white">
                             Online
@@ -279,7 +279,7 @@ export default function AdminPage() {
             </div>
           ) : (
             <div className="mb-12 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-              <div className="glass glass-card backdrop-blur-lg rounded-2xl border border-white/10 p-12 text-center">
+              <div className="glass glass-card rounded-2xl border border-white/10 p-12 text-center">
                 <p className="text-4xl mb-4">🔍</p>
                 <h3 className="text-2xl font-bold text-white mb-2">
                   No clients found

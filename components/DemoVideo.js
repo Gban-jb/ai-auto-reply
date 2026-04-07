@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const SCENES = [
   {
@@ -45,7 +45,172 @@ const SCENES = [
   },
 ];
 
-export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', businessEmoji = '🔧', color = '#E97A2B' }) {
+const DEMO_SCRIPTS = {
+  'kindred-technology': {
+    callerPhone: '(334) 555-0117',
+    ownerStatus: 'in a client strategy session',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is Kindred Technology Group. What kind of website or marketing help do you need?',
+    customerMessage:
+      'Hi! I need a new website for my home care agency and I want help with SEO too.',
+    aiReply:
+      'Absolutely, we build websites and SEO campaigns for growing businesses. Would you like to book a 15-minute discovery call this Thursday?',
+    bookingMessage:
+      'Yes, Thursday afternoon works great. Please send me the details.',
+    bookedTitle: 'Discovery Call Booked!',
+    revenueSaved: '$4.8k',
+    bookedSubtitle:
+      'Lead captured. Sales conversation secured while the team stayed focused.',
+  },
+  'baker-underwood-law': {
+    callerPhone: '(334) 555-0124',
+    ownerStatus: 'in court',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is The Baker Underwood Law Firm. What legal matter can we help you with?',
+    customerMessage:
+      'Hi, I need help setting up an LLC and I want to schedule a consultation this week.',
+    aiReply:
+      'Absolutely, we help with business formation and can walk you through the next steps. Would tomorrow at 2pm work for a consultation?',
+    bookingMessage: 'Yes, 2pm tomorrow works for me.',
+    bookedTitle: 'Consultation Scheduled!',
+    revenueSaved: '$2.5k',
+    bookedSubtitle:
+      'A new client inquiry stayed warm and moved straight to intake.',
+  },
+  walker360: {
+    callerPhone: '(334) 555-0139',
+    ownerStatus: 'on a press check',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is Walker360. What printing or marketing project are you working on?',
+    customerMessage:
+      'Hi! I need 5,000 brochures for an event next week and I also need help with the design.',
+    aiReply:
+      'We can handle both the design and print run for you. Want to set a quick project call for tomorrow morning so we can quote it fast?',
+    bookingMessage: 'Yes, tomorrow morning is perfect.',
+    bookedTitle: 'Project Call Booked!',
+    revenueSaved: '$7.2k',
+    bookedSubtitle:
+      'The print job stayed on track and the sales handoff is ready.',
+  },
+  'slt-consulting': {
+    callerPhone: '(334) 555-0142',
+    ownerStatus: 'in a strategy session',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is SLT Business Consulting. What are you building right now?',
+    customerMessage:
+      'Hi! I just launched my business and I need help creating a growth plan and finding capital.',
+    aiReply:
+      'We can absolutely help with strategy and funding readiness. Would you like to book a business discovery consult for Friday?',
+    bookingMessage: 'Friday works well for me.',
+    bookedTitle: 'Consult Booked!',
+    revenueSaved: '$1.8k',
+    bookedSubtitle:
+      'A founder got answered quickly and moved into your pipeline.',
+  },
+  'pathway-consult': {
+    callerPhone: '(256) 555-0156',
+    ownerStatus: 'on a coaching call',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is Pathway Small Business Consultants. What kind of support do you need?',
+    customerMessage:
+      'Hi, I started a business with five employees and I need help tightening our operations.',
+    aiReply:
+      'That is exactly what we help with for small teams. Would you like to grab the free 15-minute consultation on Wednesday?',
+    bookingMessage: 'Yes, Wednesday works for me.',
+    bookedTitle: 'Consultation Reserved!',
+    revenueSaved: '$950',
+    bookedSubtitle:
+      'The prospect got a clear next step without waiting for a callback.',
+  },
+  'veda-cuisine': {
+    callerPhone: '(256) 555-0168',
+    ownerStatus: 'during dinner rush',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is VEDA Indian Cuisine & Bar. How can we help with your order or reservation?',
+    customerMessage:
+      'Hi! Do you have a table for four available tonight at 7pm?',
+    aiReply:
+      'Yes, we can reserve a table for four at 7pm tonight. Can I book it under your name?',
+    bookingMessage: 'Yes please, book it under Maya Johnson.',
+    bookedTitle: 'Reservation Confirmed!',
+    revenueSaved: '$160',
+    bookedSubtitle:
+      'A missed call still turned into a filled table during service.',
+  },
+  'society-salon': {
+    callerPhone: '(256) 555-0171',
+    ownerStatus: 'with a client in the chair',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is Society Salon. What service are you looking to book?',
+    customerMessage:
+      'Hi! I want a balayage and blowout this Saturday if you have an opening.',
+    aiReply:
+      'We would love to help with that. We have a Saturday afternoon opening available. Would you like me to hold that spot for you?',
+    bookingMessage:
+      'Yes, please hold the Saturday afternoon appointment.',
+    bookedTitle: 'Salon Visit Booked!',
+    revenueSaved: '$280',
+    bookedSubtitle:
+      'The stylist stayed focused and the chair time still got sold.',
+  },
+  'mr-rooter': {
+    callerPhone: '(256) 555-0184',
+    ownerStatus: 'on an emergency repair',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is Mr. Rooter Plumbing of Huntsville. What plumbing issue are you dealing with?',
+    customerMessage:
+      'Hi! I have a burst pipe in my kitchen and I need someone out today.',
+    aiReply:
+      'We can help with that right away. We have a tech available this afternoon. Would you like me to lock in the emergency visit?',
+    bookingMessage: 'Yes, please send someone this afternoon.',
+    bookedTitle: 'Service Call Booked!',
+    revenueSaved: '$650',
+    bookedSubtitle:
+      'An urgent job got captured fast instead of slipping to a competitor.',
+  },
+  'inspiring-smiles': {
+    callerPhone: '(256) 555-0192',
+    ownerStatus: 'with a patient',
+    firstAiMessage:
+      'Hey! Sorry I missed your call. This is Inspiring Smiles Family Dentistry. How can we help today?',
+    customerMessage:
+      'Hi! I chipped a tooth and I need an emergency appointment as soon as possible.',
+    aiReply:
+      'We can help with that. We have an emergency opening tomorrow morning. Would you like me to reserve it for you?',
+    bookingMessage: 'Yes, please reserve that appointment.',
+    bookedTitle: 'Dental Visit Booked!',
+    revenueSaved: '$425',
+    bookedSubtitle:
+      'The patient got reassurance quickly and the appointment stayed in-house.',
+  },
+};
+
+function getFallbackScript(scenario) {
+  const businessName = scenario?.businessName || 'the business';
+  const service = scenario?.services?.[0] || 'services';
+
+  return {
+    callerPhone: '(555) 010-0199',
+    ownerStatus: 'helping another customer',
+    firstAiMessage: `Hey! Sorry I missed your call. This is ${businessName}. How can we help you today?`,
+    customerMessage:
+      scenario?.quickReplies?.[0] ||
+      `Hi! I would like to learn more about your ${service.toLowerCase()}.`,
+    aiReply: `Absolutely, we can help with ${service.toLowerCase()}. Would you like to book a quick follow-up with our team?`,
+    bookingMessage: 'Yes, that sounds great.',
+    bookedTitle: 'Appointment Booked!',
+    revenueSaved: '$500',
+    bookedSubtitle:
+      'Customer saved. Revenue recovered. All while the owner stayed focused.',
+  };
+}
+
+export default function DemoVideo({ scenario, autoplayToken = 0 }) {
+  const businessName = scenario?.businessName || 'Mr. Rooter Plumbing';
+  const businessEmoji = scenario?.emoji || '🔧';
+  const color = scenario?.color || '#E97A2B';
+  const script = DEMO_SCRIPTS[scenario?.id] || getFallbackScript(scenario);
+
   const [sceneIndex, setSceneIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [hasStarted, setHasStarted] = useState(false);
@@ -55,19 +220,36 @@ export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', busine
   const progress = ((sceneIndex + 1) / SCENES.length) * 100;
 
   useEffect(() => {
+    clearTimeout(timerRef.current);
+    setSceneIndex(0);
+    setIsPlaying(true);
+    setHasStarted(false);
+  }, [scenario?.id]);
+
+  useEffect(() => {
+    if (!autoplayToken) return;
+    clearTimeout(timerRef.current);
+    setSceneIndex(0);
+    setIsPlaying(true);
+    setHasStarted(true);
+  }, [autoplayToken]);
+
+  useEffect(() => {
     if (!isPlaying || !hasStarted) return;
+
     timerRef.current = setTimeout(() => {
       if (sceneIndex < SCENES.length - 1) {
-        setSceneIndex((i) => i + 1);
+        setSceneIndex((index) => index + 1);
       } else {
-        // Loop back
         setSceneIndex(0);
       }
     }, scene.duration);
+
     return () => clearTimeout(timerRef.current);
-  }, [sceneIndex, isPlaying, hasStarted, scene.duration]);
+  }, [scene.duration, sceneIndex, isPlaying, hasStarted]);
 
   const handleStart = () => {
+    clearTimeout(timerRef.current);
     setHasStarted(true);
     setSceneIndex(0);
     setIsPlaying(true);
@@ -76,14 +258,34 @@ export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', busine
   const handleToggle = () => {
     if (!hasStarted) {
       handleStart();
-    } else {
-      setIsPlaying(!isPlaying);
+      return;
     }
+
+    setIsPlaying((playing) => !playing);
+  };
+
+  const firstChatMessage = {
+    from: 'ai',
+    text: script.firstAiMessage,
+  };
+
+  const customerReply = {
+    from: 'user',
+    text: script.customerMessage,
+  };
+
+  const aiFollowUp = {
+    from: 'ai',
+    text: script.aiReply,
+  };
+
+  const bookingReply = {
+    from: 'user',
+    text: script.bookingMessage,
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto">
-      {/* Video Container */}
       <div
         className="relative rounded-2xl overflow-hidden border border-white/10"
         style={{
@@ -91,97 +293,70 @@ export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', busine
           aspectRatio: '16/9',
         }}
       >
-        {/* Scene Content */}
         <div className="absolute inset-0 flex items-center justify-center p-6">
           {!hasStarted ? (
-            <StartScreen onStart={handleStart} />
+            <StartScreen businessName={businessName} onStart={handleStart} />
           ) : (
             <>
-              {scene.id === 'ring' && <RingingScene businessName={businessName} />}
-              {scene.id === 'missed' && <MissedScene />}
+              {scene.id === 'ring' && (
+                <RingingScene
+                  businessEmoji={businessEmoji}
+                  businessName={businessName}
+                  ownerStatus={script.ownerStatus}
+                />
+              )}
+              {scene.id === 'missed' && (
+                <MissedScene
+                  callerPhone={script.callerPhone}
+                  ownerStatus={script.ownerStatus}
+                />
+              )}
               {scene.id === 'twilio-detect' && <TwilioDetectScene />}
               {scene.id === 'ai-sends' && (
                 <ChatScene
-                  messages={[
-                    {
-                      from: 'ai',
-                      text: `Hey! Sorry I missed your call. This is ${businessName}. How can I help you today? 😊`,
-                    },
-                  ]}
-                  businessName={businessName}
                   businessEmoji={businessEmoji}
+                  businessName={businessName}
+                  messages={[firstChatMessage]}
                 />
               )}
               {scene.id === 'customer-reply' && (
                 <ChatScene
-                  messages={[
-                    {
-                      from: 'ai',
-                      text: `Hey! Sorry I missed your call. This is ${businessName}. How can I help you today? 😊`,
-                    },
-                    {
-                      from: 'user',
-                      text: "Hi! I have a leaky faucet that's been dripping all day. Can you send someone?",
-                      isNew: true,
-                    },
-                  ]}
-                  businessName={businessName}
                   businessEmoji={businessEmoji}
+                  businessName={businessName}
+                  messages={[firstChatMessage, { ...customerReply, isNew: true }]}
                 />
               )}
               {scene.id === 'ai-reply' && (
                 <ChatScene
-                  messages={[
-                    {
-                      from: 'ai',
-                      text: `Hey! Sorry I missed your call. This is ${businessName}. How can I help you today? 😊`,
-                    },
-                    {
-                      from: 'user',
-                      text: "Hi! I have a leaky faucet that's been dripping all day. Can you send someone?",
-                    },
-                    {
-                      from: 'ai',
-                      text: "Absolutely! We can get a plumber out to you tomorrow morning. Would 10am work for you? 🔧",
-                      isNew: true,
-                    },
-                  ]}
-                  businessName={businessName}
                   businessEmoji={businessEmoji}
+                  businessName={businessName}
+                  messages={[firstChatMessage, customerReply, { ...aiFollowUp, isNew: true }]}
                 />
               )}
               {scene.id === 'booking' && (
                 <ChatScene
-                  messages={[
-                    {
-                      from: 'user',
-                      text: "Hi! I have a leaky faucet that's been dripping all day. Can you send someone?",
-                    },
-                    {
-                      from: 'ai',
-                      text: "Absolutely! We can get a plumber out to you tomorrow morning. Would 10am work for you? 🔧",
-                    },
-                    {
-                      from: 'user',
-                      text: "10am is perfect! Please book me in.",
-                      isNew: true,
-                    },
-                  ]}
-                  businessName={businessName}
                   businessEmoji={businessEmoji}
+                  businessName={businessName}
+                  messages={[customerReply, aiFollowUp, { ...bookingReply, isNew: true }]}
                 />
               )}
-              {scene.id === 'booked' && <BookedScene businessName={businessName} color={color} />}
+              {scene.id === 'booked' && (
+                <BookedScene
+                  bookedRevenue={script.revenueSaved}
+                  bookedSubtitle={script.bookedSubtitle}
+                  bookedTitle={script.bookedTitle}
+                  color={color}
+                />
+              )}
             </>
           )}
         </div>
 
-        {/* Step Label */}
         {hasStarted && (
           <div className="absolute top-4 left-4 flex items-center gap-2">
             <span
               className="text-[10px] font-mono px-2 py-1 rounded-full"
-              style={{ backgroundColor: `${color}30`, color: color }}
+              style={{ backgroundColor: `${color}30`, color }}
             >
               STEP {sceneIndex + 1}/{SCENES.length}
             </span>
@@ -189,7 +364,6 @@ export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', busine
           </div>
         )}
 
-        {/* Progress Bar */}
         {hasStarted && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/5">
             <div
@@ -202,7 +376,6 @@ export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', busine
           </div>
         )}
 
-        {/* Play/Pause Button */}
         {hasStarted && (
           <button
             onClick={handleToggle}
@@ -213,24 +386,29 @@ export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', busine
         )}
       </div>
 
-      {/* Timeline */}
       {hasStarted && (
         <div className="flex gap-1 mt-3 px-1">
-          {SCENES.map((s, i) => (
+          {SCENES.map((step, index) => (
             <button
-              key={s.id}
-              onClick={() => { setSceneIndex(i); setIsPlaying(true); }}
+              key={step.id}
+              onClick={() => {
+                setSceneIndex(index);
+                setIsPlaying(true);
+              }}
               className="flex-1 group relative"
             >
               <div
                 className="h-1.5 rounded-full transition-all duration-300"
                 style={{
-                  background: i <= sceneIndex ? `linear-gradient(90deg, ${color}, #00F0B5)` : 'rgba(255,255,255,0.1)',
-                  boxShadow: i === sceneIndex ? `0 0 8px ${color}60` : 'none',
+                  background:
+                    index <= sceneIndex
+                      ? `linear-gradient(90deg, ${color}, #00F0B5)`
+                      : 'rgba(255,255,255,0.1)',
+                  boxShadow: index === sceneIndex ? `0 0 8px ${color}60` : 'none',
                 }}
               />
               <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[8px] text-white/30 font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-                {s.label}
+                {step.label}
               </span>
             </button>
           ))}
@@ -240,18 +418,14 @@ export default function DemoVideo({ businessName = 'Mr. Rooter Plumbing', busine
   );
 }
 
-/* ═══════════════════════════════════════ */
-/*  SCENE COMPONENTS                      */
-/* ═══════════════════════════════════════ */
-
-function StartScreen({ onStart }) {
+function StartScreen({ businessName, onStart }) {
   return (
     <div className="flex flex-col items-center gap-5 text-center">
       <div className="text-5xl animate-float">📱</div>
       <div>
         <h3 className="text-white font-bold text-xl mb-2">See How AI Auto-Reply Works</h3>
         <p className="text-white/50 text-sm max-w-md">
-          Watch a real missed call get recovered by AI — from ring to booked appointment in seconds.
+          Watch how {businessName} turns a missed call into a booked conversation in seconds.
         </p>
       </div>
       <button
@@ -265,42 +439,45 @@ function StartScreen({ onStart }) {
   );
 }
 
-function RingingScene({ businessName }) {
+function RingingScene({ businessEmoji, businessName, ownerStatus }) {
   return (
     <div className="flex items-center gap-8">
-      {/* Phone */}
       <div className="flex flex-col items-center gap-3">
         <div className="relative">
           <div className="w-20 h-20 rounded-2xl bg-green-500/20 border-2 border-green-400 flex items-center justify-center text-4xl animate-pulse">
             📱
           </div>
-          {/* Ripple rings */}
           <div className="absolute inset-0 rounded-2xl border-2 border-green-400/50 animate-ping" />
-          <div className="absolute -inset-3 rounded-2xl border border-green-400/20 animate-ping" style={{ animationDelay: '0.5s' }} />
+          <div
+            className="absolute -inset-3 rounded-2xl border border-green-400/20 animate-ping"
+            style={{ animationDelay: '0.5s' }}
+          />
         </div>
         <span className="text-green-400 text-sm font-bold font-mono">RINGING...</span>
         <span className="text-white/40 text-xs">Customer is calling</span>
       </div>
 
-      {/* Arrow */}
       <div className="text-white/20 text-3xl">→</div>
 
-      {/* Business Owner */}
       <div className="flex flex-col items-center gap-3">
         <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-4xl relative">
-          👷
+          {businessEmoji}
           <div className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center text-[10px]">
             📞
           </div>
         </div>
-        <span className="text-white/60 text-sm font-bold">{businessName}</span>
-        <span className="text-yellow-400/70 text-xs font-mono">BUSY ON A JOB</span>
+        <span className="text-white/60 text-sm font-bold text-center max-w-[12rem]">
+          {businessName}
+        </span>
+        <span className="text-yellow-400/70 text-xs font-mono uppercase tracking-wide text-center">
+          {ownerStatus}
+        </span>
       </div>
     </div>
   );
 }
 
-function MissedScene() {
+function MissedScene({ callerPhone, ownerStatus }) {
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       <div className="relative">
@@ -310,11 +487,15 @@ function MissedScene() {
       </div>
       <div>
         <p className="text-red-400 text-lg font-bold">Missed Call!</p>
-        <p className="text-white/40 text-sm mt-1">Business owner couldn&apos;t answer — they&apos;re on a job.</p>
+        <p className="text-white/40 text-sm mt-1">
+          The owner could not answer because they were {ownerStatus}.
+        </p>
       </div>
       <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20">
         <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-        <span className="text-red-300 text-xs font-mono">1 missed call from (256) 555-0147</span>
+        <span className="text-red-300 text-xs font-mono">
+          1 missed call from {callerPhone}
+        </span>
       </div>
     </div>
   );
@@ -329,11 +510,11 @@ function TwilioDetectScene() {
         </div>
         <div className="flex flex-col items-center gap-1">
           <div className="flex gap-1">
-            {[0, 1, 2].map((i) => (
+            {[0, 1, 2].map((dot) => (
               <div
-                key={i}
+                key={dot}
                 className="w-2 h-2 rounded-full bg-teal animate-bounce"
-                style={{ animationDelay: `${i * 150}ms` }}
+                style={{ animationDelay: `${dot * 150}ms` }}
               />
             ))}
           </div>
@@ -364,12 +545,10 @@ function TwilioDetectScene() {
   );
 }
 
-function ChatScene({ messages, businessName, businessEmoji }) {
+function ChatScene({ businessEmoji, businessName, messages }) {
   return (
     <div className="w-full max-w-sm mx-auto">
-      {/* Phone Chrome */}
       <div className="rounded-2xl overflow-hidden border border-white/10" style={{ background: '#0f1d2f' }}>
-        {/* Header */}
         <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10" style={{ background: '#0a1628' }}>
           <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-sm">
             {businessEmoji}
@@ -384,30 +563,28 @@ function ChatScene({ messages, businessName, businessEmoji }) {
           </div>
         </div>
 
-        {/* Messages */}
         <div className="px-3 py-3 space-y-2.5" style={{ minHeight: '180px' }}>
-          {messages.map((msg, i) => (
+          {messages.map((message, index) => (
             <div
-              key={i}
-              className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
+              key={index}
+              className={`flex ${message.from === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
                 className={`max-w-[85%] px-3 py-2 rounded-xl text-xs leading-relaxed ${
-                  msg.isNew ? 'animate-fade-in-up fill-mode-both' : ''
+                  message.isNew ? 'animate-fade-in-up fill-mode-both' : ''
                 } ${
-                  msg.from === 'user'
+                  message.from === 'user'
                     ? 'bg-gradient-to-r from-teal/40 to-[#00F0B5]/30 text-white rounded-br-sm'
                     : 'bg-white/8 text-white/90 rounded-bl-sm'
                 }`}
-                style={msg.from !== 'user' ? { background: 'rgba(255,255,255,0.08)' } : {}}
+                style={message.from !== 'user' ? { background: 'rgba(255,255,255,0.08)' } : {}}
               >
-                {msg.text}
+                {message.text}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Input */}
         <div className="flex gap-2 px-3 py-2.5 border-t border-white/10" style={{ background: '#0a1628' }}>
           <div className="flex-1 h-8 rounded-lg bg-white/5 border border-white/10 px-3 flex items-center">
             <span className="text-white/20 text-[10px]">Type a message...</span>
@@ -424,7 +601,7 @@ function ChatScene({ messages, businessName, businessEmoji }) {
   );
 }
 
-function BookedScene({ businessName, color }) {
+function BookedScene({ bookedRevenue, bookedSubtitle, bookedTitle, color }) {
   return (
     <div className="flex flex-col items-center gap-5 text-center">
       <div className="relative">
@@ -434,19 +611,24 @@ function BookedScene({ businessName, color }) {
         >
           ✅
         </div>
-        {/* Celebration particles */}
-        <div className="absolute -top-2 -left-2 text-xl animate-bounce" style={{ animationDelay: '0ms' }}>🎉</div>
-        <div className="absolute -top-2 -right-2 text-xl animate-bounce" style={{ animationDelay: '200ms' }}>⭐</div>
-        <div className="absolute -bottom-1 -left-3 text-lg animate-bounce" style={{ animationDelay: '400ms' }}>💰</div>
-        <div className="absolute -bottom-1 -right-3 text-lg animate-bounce" style={{ animationDelay: '300ms' }}>📅</div>
+        <div className="absolute -top-2 -left-2 text-xl animate-bounce" style={{ animationDelay: '0ms' }}>
+          🎉
+        </div>
+        <div className="absolute -top-2 -right-2 text-xl animate-bounce" style={{ animationDelay: '200ms' }}>
+          ⭐
+        </div>
+        <div className="absolute -bottom-1 -left-3 text-lg animate-bounce" style={{ animationDelay: '400ms' }}>
+          💰
+        </div>
+        <div className="absolute -bottom-1 -right-3 text-lg animate-bounce" style={{ animationDelay: '300ms' }}>
+          📅
+        </div>
       </div>
       <div>
-        <p className="text-2xl font-bold text-white mb-1">Appointment Booked!</p>
-        <p className="text-white/50 text-sm">
-          Customer saved. Revenue recovered. All while the owner was on the job.
-        </p>
+        <p className="text-2xl font-bold text-white mb-1">{bookedTitle}</p>
+        <p className="text-white/50 text-sm">{bookedSubtitle}</p>
       </div>
-      <div className="flex gap-4 mt-2">
+      <div className="mt-2 grid w-full max-w-2xl grid-cols-2 gap-3 md:grid-cols-4">
         <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-center">
           <p className="text-teal text-lg font-bold font-mono">~2s</p>
           <p className="text-white/30 text-[10px] font-mono">RESPONSE TIME</p>
@@ -458,6 +640,10 @@ function BookedScene({ businessName, color }) {
         <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-center">
           <p className="text-[#F22F46] text-lg font-bold">Twilio</p>
           <p className="text-white/30 text-[10px] font-mono">POWERED BY</p>
+        </div>
+        <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-center">
+          <p className="text-amber-300 text-lg font-bold font-mono">{bookedRevenue}</p>
+          <p className="text-white/30 text-[10px] font-mono">REVENUE SAVED</p>
         </div>
       </div>
     </div>
